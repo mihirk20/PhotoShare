@@ -1,61 +1,69 @@
 import React, { useEffect, useState } from "react";
-import LocationsList from "../components/LocationsList"
 import { useParams } from "react-router-dom";
-const UserLocations = (props) => {
-    // const USER_LOCATIONS = [
-    //     {
-    //         id: "loc1",
-    //         title: "Red Fort",
-    //         desc: "The Red Fort or Lal Qila (Hindustani: [laːl qiːlaː]) is a historic fort in the Old Delhi neighbourhood of Delhi, India",
-    //         pic: "https://media-cdn.tripadvisor.com/media/photo-s/21/59/70/42/caption.jpg",
-    //         address: "52HC+VFH, Agra Fort, Rakabganj, Agra, Uttar Pradesh 282003",
-    //         userid: "u1"
-    //     },
-    //     {
-    //         id: "loc2",
-    //         title: "Jaigarh Fort",
-    //         desc: "Jaigarh Fort is situated on the promontory called the Cheel ka Teela (Hill of Eagles) of the Aravalli range",
-    //         pic: "https://www.trawell.in/admin/images/upload/151648856Jaipur_Jaigarh_Fort_Main.jpg",
-    //         address: "Devisinghpura, Amer, Jaipur, Rajasthan 302028",
-    //         userid: "u1"
-    //     },
-    //     {
-    //         id: "loc1",
-    //         title: "Red Fort",
-    //         desc: "The Red Fort or Lal Qila (Hindustani: [laːl qiːlaː]) is a historic fort in the Old Delhi neighbourhood of Delhi, India",
-    //         pic: "https://media-cdn.tripadvisor.com/media/photo-s/21/59/70/42/caption.jpg",
-    //         address: "52HC+VFH, Agra Fort, Rakabganj, Agra, Uttar Pradesh 282003",
-    //         userid: "u2"
-    //     }
-    // ];
-    const userid = useParams().userid;
-    const [error, setError] = useState();
-    const [saveLocations, setSavedLocations] = useState();
-    useEffect(() => {
-        const sendRequest = async () => {
-            try {
-                const response = await (`http://localhost:5000/api/locations/users/${userid}`)
-                const responseData = await response.json();
-                if (!response.ok) {
-                    throw new Error(responseData.message)
 
-                }
-                setSavedLocations(responseData.message);
-            } catch (err) {
-                alert(err.message, () => {
-                    setError(null);
-                });
-                setError(err.message);
-            }
+import LocationsList from "../components/LocationsList";
 
+const UserLocations = () => {
+  // const USER_LOCATIONS = [
+  //   {
+  //     id: "loc1",
+  //     title: "Red Fort",
+  //     desc: "The Red Fort or Lal Qila (Hindustani: [lal qila]) is a historic fort in the Old Delhi neighbourhood of Delhi, India, ",
+  //     pic: "https://assets-news.housing.com/news/wp-content/uploads/2021/07/20184714/All-about-the-Delhi-Red-Fort-or-Lal-Kila-FB-1200x700-compressed-2-686x400.jpg",
+  //     address: "W82F+4C, Adarsh Meena Colony, Dausa, Rajasthan 303303",
+  //     userid: "u1",
+  //   },
+  //   {
+  //     id: "loc2",
+  //     title: "Taj Mahal",
+  //     desc: "The Taj Mahal is an ivory-white marble mausoleum on the right bank of the river Yamuna in Agra",
+  //     pic: "https://whc.unesco.org/uploads/thumbs/site_0252_0008-750-750-20151104113424.jpg",
+  //     address: "Dharmapuri, Forest Colony, Tajganj, Agra, Uttar Pradesh 282001",
+  //     userid: "u1",
+  //   },
+  //   {
+  //     id: "loc3",
+  //     title: "Jatayu Park",
+  //     desc: "Jatayu Earth Center, is a park and tourism centre at Chadayamangalam in Kollam district of Kerala, India",
+  //     pic: "https://akm-img-a-in.tosshub.com/indiatoday/jatayustory-647_112817060030.jpg",
+  //     address:
+  //       "Jatayu Nature Park Rd, Jatayu Junction, Chadayamangalam, Kerala 691534",
+  //     userid: "u2",
+  //   },
+  // ];
+  const userid = useParams().userid;
+  const [error, setError] = useState();
+  const [savedlocations, setSavedLocations] = useState();
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/locations/users/${userid}`
+        );
+        const responseData = await response.json();
+        console.log("userlocations:" + responseData.message);
+        if (!response.ok) {
+          throw new Error(responseData.message);
         }
-        sendRequest();
-    }, [userid])
+        setSavedLocations(responseData.message);
+      } catch (err) {
+        alert(err.message, () => {
+          setError(null);
+        });
+        setError(err.message);
+      }
+    };
+    sendRequest();
+  }, [userid]);
 
-    // const FILTERED_LOCATIONS = USER_LOCATIONS.filter(location => location.userid === userid);
-    return (
-        < React.Fragment>{saveLocations && <LocationsList items={saveLocations} />}</React.Fragment>)
-
+  // const FILTERED_LOCATIONS = USER_LOCATIONS.filter(
+  //   (location) => location.userid === userid
+  // );
+  return (
+    <React.Fragment>
+      {savedlocations && <LocationsList items={savedlocations} />}
+    </React.Fragment>
+  );
 };
 
 export default UserLocations;

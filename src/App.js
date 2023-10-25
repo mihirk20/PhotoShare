@@ -1,8 +1,14 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback,useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from "react-router-dom";
+
 import Users from "./users/pages/Users";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import NewLocations from "./locations/pages/NewLocations";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import Register from "./users/pages/register"
+import NewLocation from "./locations/pages/NewLocation";
 import MainNavigation from "./common/components/Navigation/MainNavigation";
 import UserLocations from "./locations/pages/UserLocations";
 import Login from "./users/pages/Login";
@@ -10,19 +16,36 @@ import { LoginContext } from "./common/components/context";
 
 const App = () => {
   const [userID, setUserID] = useState(null);
-  const [isloggedin, setloggedin] = useState(false);
+  const [isloggedin, setIsloggedin] = useState(false);
   const login = useCallback((uid) => {
     setUserID(uid);
-    setloggedin(true);
-  }, []);
-  const logout = useCallback(() => {
-    setUserID(null);
-    setloggedin(false);
+    setIsloggedin(true);
+    localStorage.setItem('userId', uid);
+  localStorage.setItem('isLoggedIn', true);
   }, []);
 
-  let validRoutes;
+  const logout = useCallback(() => {
+    setIsloggedin(false);
+    setUserID(null);
+    localStorage.removeItem('userId');
+  localStorage.removeItem('isLoggedIn');
+  }, []);
+
+  useEffect(() => {
+    const storedUserID = localStorage.getItem('userId');
+    const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+  
+    if (storedUserID && storedIsLoggedIn) {
+      setUserID(storedUserID);
+      setIsloggedin(true);
+    }
+  }, []);
+  
+
+  let validroutes;
+
   if (isloggedin) {
-    validRoutes = (
+    validroutes = (
       <Switch>
         <Route path="/" exact>
           <Users />
@@ -31,34 +54,46 @@ const App = () => {
           <UserLocations />
         </Route>
         <Route path="/locations/new" exact>
-          <NewLocations />
+          <NewLocation />
         </Route>
         <Redirect to="/" />
       </Switch>
-    )
-  }
-  else {
-    validRoutes = (
+    );
+  } else {
+    validroutes = (
       <Switch>
         <Route path="/" exact>
           <Users />
         </Route>
-        <Route path to="/Login">
+        <Route path="/:userid/locations" exact>
+          <UserLocations />
+        </Route>
+        <Route path="/login" exact>
           <Login />
         </Route>
-        <Redirect to="/login" />
+        <Route path="/register">
+          <Register/>
+        </Route>
+        <Redirect to="/"/>
       </Switch>
-    )
+    );
   }
+
   return (
-    <LoginContext.Provider value={{ isloggedin: isloggedin, userID: userID, login: login, logout: logout }}>
+    <LoginContext.Provider
+      value={{
+        isLoggedIn: isloggedin,
+        userID: userID,
+        login: login,
+        logout: logout,
+      }}
+    >
       <Router>
         <MainNavigation />
-        <main>
-          {validRoutes}
-        </main>
+        <main>{validroutes}</main>
       </Router>
     </LoginContext.Provider>
-  )
-}
+  );
+};
+
 export default App;
