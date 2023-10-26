@@ -16,9 +16,10 @@
     background:#F9F7F7;
 }
 
-form-control {
-    margin: 1rem 0;
-   
+.form-control {
+    margin: 0.3rem 0;
+    background: transparent;
+    border:none;
   }
   
   .form-control label,
@@ -42,7 +43,7 @@ form-control {
     font: inherit;
     margin-bottom: 1rem;
     border: none;
-    border-bottom: 1px solid #ccc;
+    /* border-bottom: 1px solid #ccc; */
     border-radius: 5px;
     background: #DBE2EF;
     letter-spacing: 1px;
@@ -65,6 +66,7 @@ border-radius: 30px;
 color:white;
 display:block;
 margin:0 auto;
+/* margin-top: 7px; */
 cursor:pointer;
 transition: background 0.1s ease-in;
 font-family: 'Kalam', cursive;

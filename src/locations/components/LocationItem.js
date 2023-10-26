@@ -1,5 +1,6 @@
 import React from "react";
 import "./LocationItem.css";
+import DeleteButton from "../pages/delLocation";
 const LocationsItem = (props) => {
   return (
     <li className="locationitem">
@@ -12,14 +13,13 @@ const LocationsItem = (props) => {
           <h3>{props.desc}</h3>
           <p>{props.address}</p>
         </div>
-        {/* <div className="locationitem-delete">
-          <button>
-              Delete
-        </button>
-        </div> */}
+        <div className="locationitem-delete" id="delete">
+        {/* document.getElementById("delete").onclick = function()  */}
+        {/* <button onClick={DeleteButton}>Delete</button> */}
+        <DeleteButton locid={props.id} onDelete={props.onDelete} />
+        </div>
       </div>
     </li>
   );
 };
-
 export default LocationsItem;

@@ -1,5 +1,5 @@
 import React from "react";
-
+// import delLocation from "../pages/delLocation";
 import LocationItem from "../components/LocationItem";
 import "./LocationsList.css";
 
@@ -22,6 +22,7 @@ const LocationsList = (props) => {
             pic={location.pic}
             address={location.address}
             desc={location.desc}
+            // deleteHandler={deleteHandler}
           />
         );
       })}
